@@ -45,9 +45,20 @@ command=/usr/sbin/xinetd -pidfile /var/run/xinetd.pid -stayalive -inetd_compat -
 ````ini
 [program:vsftpd]
 command=/usr/sbin/vsftpd
-autostart=true
-autorestart=true
 ```
 
+#### memcached
+```ini
+[program:memcached]
+command=/usr/bin/memcached -u memcache
+startsecs = 3
+stopwaitsecs = 3
+```
 
-
+#### rsyslogd
+```ini
+[program:rsyslog]
+command=/bin/bash -c "source /etc/default/rsyslog && /usr/sbin/rsyslogd -n -c3"
+startsecs = 5
+stopwaitsecs = 5
+```
