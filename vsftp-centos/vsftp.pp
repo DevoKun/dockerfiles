@@ -15,6 +15,8 @@ connect_from_port_20=YES
 xferlog_std_format=YES
 listen=YES
 
+background=NO
+
 pam_service_name=vsftpd
 userlist_enable=YES
 tcp_wrappers=YES
@@ -88,7 +90,8 @@ username=admin
 password=!supervisord!
 
 [program:vsftpd]
-command=/bin/bash -c "exec /usr/sbin/vsftpd"
+#command=/bin/bash -c "exec /usr/sbin/vsftpd"
+command=/usr/sbin/vsftpd
 autostart=true
 autorestart=true
 
