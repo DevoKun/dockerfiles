@@ -1,0 +1,14 @@
+openstack-swift-proxy
+openstack-swift-object
+openstack-swift-object-replicator
+openstack-swift-object-updater
+openstack-swift-object-auditor
+openstack-swift-container
+openstack-swift-container-replicator
+openstack-swift-container-updater
+openstack-swift-container-auditor
+openstack-swift-account
+openstack-swift-account-replicator
+openstack-swift-account-reaper
+openstack-swift-account-auditor
+xinetd
