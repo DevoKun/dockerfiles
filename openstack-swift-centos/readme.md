@@ -62,9 +62,59 @@ swift_hash_path_suffix = 5fc83be6d952b4ad
 allow_versions = true
 ```
 
+### Create a container with the X-Versions-Location header or add the header to an existing container.
+* Make sure the container referenced by the X-Versions-Location exists.
+* Where the name of that container is ***versions***
+```bash
+curl -i -XPUT -H "X-Auth-Token: <token>" \
+     -H "X-Versions-Location: versions" http://<storage_url>/container
+
+curl -i -XPUT -H "X-Auth-Token: <token>" http://<storage_url>/versions
+```
+
+### Create an object
+```bash
+curl -i -XPUT --data-binary 1 -H "X-Auth-Token: <token>" \
+     http://<storage_url>/container/myobject
+```
+
+
+### Create a new object version
+```bash
+curl -i -XPUT --data-binary 2 -H "X-Auth-Token: <token>" \
+    http://<storage_url>/container/myobject
+```
+
+
+### See a listing of the older versions of an object
+```bash
+curl -i -H "X-Auth-Token: <token>" \
+     http://<storage_url>/versions?prefix=008myobject/
+```
+
+### Delete the current version of an object and see that the older version is gone:
+```bash
+curl -i -XDELETE -H "X-Auth-Token: <token>" \
+    http://<storage_url>/container/myobject
+
+curl -i -H "X-Auth-Token: <token>" \
+    http://<storage_url>/versions?prefix=008myobject/
+```
+
+### Disable versioning on a versioned container
+* ***n*** is any value except empty
+```bash
+curl -i -HPOST -H "X-Auth-Token: <token>" \
+     -H "X-Remove-Versions-Location: n" http://<storage_url>/container
+```
+
+
 ### Reference
 * http://docs.openstack.org/developer/swift/overview_object_versioning.html
 * https://github.com/openstack/swift/blob/master/etc/container-server.conf-sample
+
+
+
 
 ## Filesystem Extended Attributes (xattr)
 * Swift requires xattr.
