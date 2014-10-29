@@ -63,6 +63,7 @@ startsecs    = 5
 stopwaitsecs = 5
 ```
 #### A NodeJS Application
+```ini
 [program:nodeapp]
 command        = node /path/to/index.js
 directory      = /path/to/
@@ -72,3 +73,18 @@ autorestart    = true
 stdout_logfile = /var/log/supervisor/nodeapp.log
 stderr_logfile = /var/log/supervisor/nodeapp_err.log
 environment    = NODE_ENV="production"
+```
+
+#### Logstash
+```ini
+[program:logstash]
+command        = /opt/logstash/bin/logstashagent -f /etc/logstash/conf.d -l /var/log/logstash/logstash.log --verbose
+autostart      = true
+autorestart    = true
+stdout_logfile = /var/log/logstash/logstash.log
+stderr_logfile = /var/log/logstash/logstash-error.log
+environment    = LS_HOME="/var/lib/logstash",LS_HEAP_SIZE="500m",LS_JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash",JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash"
+user           = logstash
+directory      = /var/lib/logstash
+```
+
