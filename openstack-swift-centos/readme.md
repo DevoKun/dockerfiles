@@ -213,3 +213,19 @@ service docker stop
 sudo rm -Rf /var/lib/docker
 service docker start
 ```
+
+
+### http://yum.theforeman.org/releases/1.5/%25FDIST%25%25RELEASEVER%25/x86_64/repodata/repomd.xml "The requested URL returned error: 404 Not Found"
+```raw
+http://yum.theforeman.org/releases/1.5/%25FDIST%25%25RELEASEVER%25/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 22 - "The requested URL returned error: 404 Not Found"
+Trying other mirror.
+Error: Cannot retrieve repository metadata (repomd.xml) for repository: foreman. Please verify its path and try again
+```
+* ***Valid URL***: http://yum.theforeman.org/releases/1.5/el6/x86_64/
+
+```bash
+sed -i 's/%FDIST%%RELEASEVER%/el6/g' /etc/yum.repos.d/foreman.repo
+```
+
+### memcached exit status 67
+* Trying to start memcache as a non-existent user. Doublecheck the username.
