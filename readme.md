@@ -50,15 +50,25 @@ command=/usr/sbin/vsftpd
 #### memcached
 ```ini
 [program:memcached]
-command=/usr/bin/memcached -u memcache
-startsecs = 3
+command      = /usr/bin/memcached -u memcache
+startsecs    = 3
 stopwaitsecs = 3
 ```
 
 #### rsyslogd
 ```ini
 [program:rsyslog]
-command=/bin/bash -c "source /etc/default/rsyslog && /usr/sbin/rsyslogd -n -c3"
-startsecs = 5
+command      = /bin/bash -c "source /etc/default/rsyslog && /usr/sbin/rsyslogd -n -c3"
+startsecs    = 5
 stopwaitsecs = 5
 ```
+#### A NodeJS Application
+[program:nodeapp]
+command        = node /path/to/index.js
+directory      = /path/to/
+user           = nodeuser
+autostart      = true
+autorestart    = true
+stdout_logfile = /var/log/supervisor/nodeapp.log
+stderr_logfile = /var/log/supervisor/nodeapp_err.log
+environment    = NODE_ENV="production"
