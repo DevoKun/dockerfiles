@@ -1,0 +1,16 @@
+### Name: RPMforge RPM Repository for RHEL 6 - x86_64 - dag
+### URL: http://rpmforge.net/
+[rpmforge]
+name = Packages from RPMforge.net for RHEL 6 - x86_64 - dag
+baseurl = http://apt.sw.be/redhat/el6/en/x86_64/rpmforge
+type = rpm-md
+
+#[rpmforge-extras]
+#name = Extra packages from RPMforge.net for RHEL 6 - x86_64 - extras
+#baseurl = http://apt.sw.be/redhat/el6/en/x86_64/extras
+#type = rpm-md
+
+#[rpmforge-testing]
+#name = Test packages from RPMforge.net for RHEL 6 - x86_64 - testing
+#baseurl = http://apt.sw.be/redhat/el6/en/x86_64/testing
+#type = rpm-md

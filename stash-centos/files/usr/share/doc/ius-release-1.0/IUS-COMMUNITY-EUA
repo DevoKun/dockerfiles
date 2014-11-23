@@ -1,0 +1,60 @@
+          IUS Community Project End User Agreement v0.1
+
+This agreement governs the download, installation or use of the 
+Software (as defined below) and any updates to the Software, regardless 
+of the delivery mechanism. The Software is a collective work under U.S. 
+Copyright Law.  Subject to the following terms, Rackspace grants to the 
+user ("User") a license to this collective work.  By downloading, 
+installing or using the Software, User agrees to the terms of this 
+agreement.
+
+                              - - -
+                              
+DEFINITIONS:
+
+IUS - Stands for "Inline with Upstream Stable".  The "IUS Community 
+Project" is an open project sponsored by Rackspace, and is NOT A SERVICE 
+OF RACKSPACE.
+
+End User - The "End User" is defined as any person that willingly and 
+lawfully subscribes to an IUS Software Repository in order to install 
+Software via an IUS installation package.  Also referred to as 'User'.
+
+Upstream Vendor - An "Upstream Vendor" is any software company or 
+Individual software developer that is the known owner and responsible 
+party for development and maintenance of the original source of the 
+Software.
+
+Software - The "Software" is any piece of source code, compiled 
+binaries, configuration files, documentation, library files, 
+installation packages (i.e. RPM), etc.  Some components of said 
+Software may include additional License Agreements set forth by the 
+Upstream Vendor that the End User must adhere to.  
+
+System - A "System" is any computer system that is or may become the 
+destination of and utilize the Software.
+
+                              - - -
+
+TECHNICAL SUPPORT: Rackspace is not obligated to provide support of 
+any kind for use of the Software provided by The IUS Community Project. 
+
+LIMITED WARRANTY.  Except as specifically stated in this agreement
+or a license for a particular component, TO THE MAXIMUM EXTENT
+PERMITTED UNDER APPLICABLE LAW, THE SOFTWARE AND THE COMPONENTS ARE
+PROVIDED AND LICENSED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EXPRESSED OR IMPLIED, INCLUDING THE IMPLIED WARRANTIES OF
+MERCHANTABILITY, NON-INFRINGEMENT OR FITNESS FOR A PARTICULAR
+PURPOSE.  Neither the IUS Community Project nor Rackspace warrants that 
+the functions contained in the Software will meet User's requirements or
+that the operation of the Software will be entirely error free or appear 
+precisely as described in the accompanying documentation.  USE OF THE 
+SOFTWARE IS AT USER'S OWN RISK.
+
+LIMITATION OF REMEDIES AND LIABILITY. TO THE MAXIMUM EXTENT PERMITTED 
+BY APPLICABLE LAW, THE IUS COMMUNITY PROJECT AND RACKSPACE WILL NOT BE 
+LIABLE TO USER FOR ANY DAMAGES, INCLUDING INCIDENTAL OR CONSEQUENTIAL 
+DAMAGES, LOST PROFITS OR LOST SAVINGS ARISING OUT OF THE USE OR INABILITY 
+TO USE THE SOFTWARE, EVEN IF THE IUS COMMUNITY PROJECT OR RACKSPACE HAS 
+BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+

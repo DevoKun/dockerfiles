@@ -1,0 +1,12 @@
+### Name: RPMforge RPM Repository for RHEL 6 - x86_64 - dag
+### URL: http://rpmforge.net/
+#
+# Add the following line to /etc/sysconfig/rhn/sources
+#
+#   yum rpmforge http://apt.sw.be/redhat/el6/en/x86_64/rpmforge
+#   yum rpmforge http://apt.sw.be/redhat/el6/en/x86_64/extras
+#   yum rpmforge http://apt.sw.be/redhat/el6/en/x86_64/testing
+# or
+#   apt rpmforge http://apt.sw.be redhat/el6/en/x86_64 rpmforge
+#   apt rpmforge http://apt.sw.be redhat/el6/en/x86_64 extras
+#   apt rpmforge http://apt.sw.be redhat/el6/en/x86_64 testing

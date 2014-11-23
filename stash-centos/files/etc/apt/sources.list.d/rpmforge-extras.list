@@ -1,0 +1,4 @@
+### Name: RPMforge RPM Repository for RHEL 6 - extras
+### URL: http://rpmforge.net/
+#rpm http://apt.sw.be redhat/el$(VERSION)/en/$(ARCH) extras
+#repomd http://apt.sw.be redhat/el$(VERSION)/en/$(ARCH)/extras

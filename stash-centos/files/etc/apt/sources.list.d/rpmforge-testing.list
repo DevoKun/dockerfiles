@@ -1,0 +1,4 @@
+### Name: RPMforge RPM Repository for RHEL 6 - testing
+### URL: http://rpmforge.net/
+#rpm http://apt.sw.be redhat/el$(VERSION)/en/$(ARCH) testing
+#repomd http://apt.sw.be redhat/el$(VERSION)/en/$(ARCH)/testing
