@@ -1,0 +1,6 @@
+*~
+*.bak
+*.elc
+*.pyc
+*.orig
+*.lock
