@@ -5,3 +5,5 @@
 *.orig
 *.lock
 Config.groovy
+java7-centos/compile_priam/priam
+java7-centos/compile_priam/priam/*
