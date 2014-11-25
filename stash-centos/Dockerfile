@@ -53,7 +53,7 @@ RUN yum groupinstall -y "Development Tools"
 ##### Development Tools will install git
 RUN yum remove -y git perl-Git ; true
 ##### Installed by Development Tools
-# RUN yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+RUN yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
 RUN wget -O /usr/src/git-1.9.4.tar.gz https://github.com/git/git/archive/v1.9.4.tar.gz
 RUN tar zxf /usr/src/git-1.9.4.tar.gz -C /usr/src
 RUN cd /usr/src/git-1.9.4 && make configure && ./configure --without-tcltk --without-python --without-iconv --prefix=/usr && make NO_PERL=1 && make install NO_PERL=1
