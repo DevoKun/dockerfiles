@@ -137,6 +137,20 @@ user           = stash
 directory      = /opt/stash
 ```
 
+#### Atlassian Bamboo
+```ini
+[program:bamboo]
+command        = /opt/bamboo/bin/start-bamboo.sh -fg
+autostart      = true
+autorestart    = true
+stdout_logfile = /var/log/bamboo.log
+stderr_logfile = /var/log/bamboo-error.log
+environment    = BAMBOO_HOME=/opt/bamboo/home
+user           = bamboo
+directory      = /opt/bamboo
+```
+
+
 #### Tomcat 6
 ```ini
 [program:tomcat6-8300]
@@ -206,6 +220,48 @@ trap shutdown HUP INT QUIT ABRT KILL ALRM TERM TSTP
 echo "Waiting for $(cat $CATALINA_PID)"
 wait $(cat $CATALINA_PID)
 ```
+
+#### Tomcat 7 on CentOS 6
+```ini
+[program:tomcat]
+directory      = /usr/share/tomcat
+command        = /usr/local/sbin/supervisord_tomcat.sh
+stdout_logfile = /var/log/tomcat.log
+stderr_logfile = /var/log/tomcat-error.log
+user           = tomcat
+```
+
+
+**FILE**: /usr/local/sbin/tomcat_run.sh
+```bash
+#!/bin/bash
+
+if [ -f /etc/tomcat/tomcat.conf ]; then
+  source /etc/tomcat/tomcat.conf
+fi
+
+export JAVA_HOME="/usr/lib/jvm/jre"
+export _RUNJAVA="/usr/bin/java"
+export LOGGING_CONFIG="-Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties"
+export LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+export JAVA_OPTS=""
+export CATALINA_OPTS=""
+export CATALINA_BASE="/usr/share/tomcat"
+export CATALINA_HOME="/usr/share/tomcat"
+export CATALINA_TMPDIR="/var/cache/tomcat/temp"
+export CLASSPATH="${CATALINA_BASE}/bin/bootstrap.jar:${CATALINA_BASE}/bin/tomcat-juli.jar"
+export JAVA_ENDORSED_DIRS="${CATALINA_BASE}/endorsed"
+
+eval exec "\"$_RUNJAVA\"" "\"$LOGGING_CONFIG\"" $LOGGING_MANAGER $JAVA_OPTS $CATALINA_OPTS \
+  -Djava.endorsed.dirs="\"$JAVA_ENDORSED_DIRS\"" -classpath "\"$CLASSPATH\"" \
+  -Dcatalina.base="\"$CATALINA_BASE\"" \
+  -Dcatalina.home="\"$CATALINA_HOME\"" \
+  -Djava.io.tmpdir="\"$CATALINA_TMPDIR\"" \
+  org.apache.catalina.startup.Bootstrap "$@" start
+```
+
+
+
 
 ## Zookeeper
 ```ini
