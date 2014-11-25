@@ -68,9 +68,17 @@ EXPOSE 25565
 
 WORKDIR /opt/minecraft
 
-CMD echo -e "\n\n\033[32;1m###############################################################\n\033[32;1m##\n\033[32;1m## \033[33;1mBUKKIT MINECRAFT SERVER\n\033[32;1m##\n\033[32;1m###############################################################\n\n\033[37;0m"
-CMD echo -e "\n\n\033[37;1m  * \033[33;1mStarting Bukkit Minecraft Server \033[37;1m... \033[37;0m"
-CMD (cd /opt/minecraft && java -Xmx1024M -Xms768M -jar craftbukkit.jar nogui)
+# CMD echo -e "\n\n\033[32;1m###############################################################\n\033[32;1m##\n\033[32;1m## \033[33;1mBUKKIT MINECRAFT SERVER\n\033[32;1m##\n\033[32;1m###############################################################\n\n\033[37;0m"
+# CMD echo -e "\n\n\033[37;1m  * \033[33;1mStarting Bukkit Minecraft Server \033[37;1m... \033[37;0m"
+# CMD (cd /opt/minecraft && java -Xmx1024M -Xms768M -jar craftbukkit.jar nogui)
+####
+#### There can only be one CMD instruction in a Dockerfile.
+#### If you list more than one CMD then only the last CMD will take effect.
+####
+CMD (echo -e "\n\n" ; echo -e "\033[32;1m###############################################################" ; echo -e "\033[32;1m##" ;
+echo -e "\033[32;1m## \033[33;1mBUKKIT MINECRAFT SERVER\n\033[32;1m##" ; echo -e "\033[32;1m###############################################################" ;
+echo -e "\033[37;0m" ; echo -e "\033[37;1m  * \033[33;1mStarting Bukkit Minecraft Server \033[37;1m... \033[37;0m" ; java -Xmx1024M -Xms768M -jar craftbukkit.jar nogui)
+
 
 
 
