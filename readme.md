@@ -30,7 +30,21 @@ sudo docker ps -a | awk '{if (substr($0, 97, 6)=="Exited") print "sudo docker rm
 ```
 
 
+## Using items from outside the container
+* **-v** *(--volume=[])* will bind directories or files from outside the container to locations inside the container.
 
+### Bind Directories
+```bash
+docker run -ti -v $(pwd)/logs:/var/logs ubuntu:14.04.1 /bin/bash
+```
+
+### Bind Individual Files
+* If the file is one that will be created inside the container, it is best to pre-create the file outside the container.
+* If the bind target does not exist as a file outside the container Docker will assume the file is a directory and create it as such.
+```bash
+touch $(pwd)/hosts
+docker run -ti -v $(pwd)/hosts:/etc/hosts ubuntu:14.04.1 /bin/bash
+```
 
 
 
@@ -89,6 +103,15 @@ command=/usr/sbin/vsftpd
 command      = /usr/bin/memcached -u memcache
 startsecs    = 3
 stopwaitsecs = 3
+```
+
+#### Shibboleth-SP
+```ini
+[program:memcached]
+command      = shibd -F -c /etc/shibboleth/shibboleth2.xml -f -w 30
+user         = shibd
+autostart    = true
+autorestart  = true
 ```
 
 #### rsyslogd
@@ -288,7 +311,7 @@ autorestart    = true
 ## ETCD
 ```ini
 [program:etcd]
-command        = etcd
+command        = /usr/bin/etcd
 stdout_logfile = /var/log/etcd.log
 stderr_logfile = /var/log/etcd-error.log
 autostart      = true
@@ -296,5 +319,144 @@ autorestart    = true
 ```
 
 
+## Cassandra
+```ini
+[program:cassandra]
+command        = cassandra -f
+stdout_logfile = /var/log/cassandra.log
+stderr_logfile = /var/log/cassandra-error.log
+autostart      = true
+autorestart    = true
+```
+
+## Netflix Priam
+* Priam is run from inside Tomcat.
+* Start Tomcat *(see above)*
+
+
+
+
+## SublimeText Dockerfile Syntax Highlighting
+
+### Create Package directories
+
+#### On MacOS X
+```bash
+cd "~/Library/Application Support/Sublime Text 2/Packages/"
+mkdir Dockerfile
+cd Dockerfile
+```
+
+### Download tmLanguage and tmPreferences
+```bash
+wget https://raw.githubusercontent.com/asbjornenge/Docker.tmbundle/master/Syntaxes/Dockerfile.tmLanguage
+
+wget https://raw.githubusercontent.com/asbjornenge/Docker.tmbundle/master/Preferences/Dockerfile.tmPreferences
+
+```
+
+
+## Private Docker Registry
+
+* a git repository for images
+* example: https://github.com/lukaspustina/docker-registry-demo
+
+### Tag a Docker container and push to registry
+
+* Every single command in a Dockerfile yields a new Docker image with an individual id similar to a commit in git.
+* This commit can be tagged for easy reference with a Docker Tag.
+* In addition, tags are the means to share images on public and private repositories.
+
+#### assuming your registry is listing on localhost port 5000:
+
+```bash
+ docker tag lukaspustina/registry-demo localhost:5000/registry-demo
+ docker push localhost:5000/registry-demo
+```
+
+### Run a Docker registry container
+
+* **Official Docker registry**: https://github.com/dotcloud/docker-registry
+
+```bash
+docker run \
+         -e SETTINGS_FLAVOR=s3 \
+         -e AWS_BUCKET=mybucket \
+         -e STORAGE_PATH=/registry \
+         -e AWS_KEY=myawskey \
+         -e AWS_SECRET=myawssecret \
+         -p 5000:5000 \
+         registry
+
+```
+
+### Flavor Settings
+* **common**: used by all other flavors as base settings
+* **local**: stores data on the local filesystem
+* **s3**: stores data in an AWS S3 bucket
+* **ceph-s3**: stores data in a Ceph cluster via a Ceph Object Gateway, using the S3 API
+* **azureblob**: stores data in an Microsoft Azure Blob Storage ((docs))
+* **dev**: basic configuration using the local flavor
+* **test**: used by unit tests
+* **prod**: production configuration (basically a synonym for the s3 flavor)
+* **gcs**: stores data in Google cloud storage
+* **swift**: stores data in OpenStack Swift
+* **glance**: stores data in OpenStack Glance, with a fallback to local storage
+* **glance-swift**: stores data in OpenStack Glance, with a fallback to Swift
+* **elliptics**: stores data in Elliptics key/value storage
+
+#### AWS Simple Storage Service options
+
+* **s3_access_key**: string, S3 access key
+* **s3_secret_key**: string, S3 secret key
+* **s3_bucket**: string, S3 bucket name
+* **s3_region**: S3 region where the bucket is located
+* **s3_encrypt**: boolean, if true, the container will be encrypted on the server-side by S3 and will be stored in an encrypted form while at rest in S3.
+* **s3_secure**: boolean, true for HTTPS to S3
+* **s3_use_sigv4**: boolean, true for USE_SIGV4 (boto_host needs to be set or use_sigv4 will be ignored by boto.)
+* **boto_bucket**: string, the bucket name for non-Amazon S3-compliant object store
+* **boto_host**: string, host for non-Amazon S3-compliant object store
+* **boto_port**: for non-Amazon S3-compliant object store
+* **boto_debug**: for non-Amazon S3-compliant object store
+* **boto_calling_format**: string, the fully qualified class name of the boto calling format to use when accessing S3 or a non-Amazon S3-compliant object store
+* **storage_path**: string, the sub "folder" where image data will be stored.
+
+#### Example:
+
+```yaml
+prod:
+  storage: s3
+  s3_region: us-east-1
+  s3_bucket: my-docker-bucket
+  storage_path: /registry
+  s3_access_key: AKIkkkkkkkkkkkkkk
+  s3_secret_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+### Storage Backends
+* Docker registry supports multiple storage backends:
+# local file system
+# Amazon S3
+# OpenStack Glance
+
+### config/config.yml secret key
+* set a **secret_key** in the configuration file **config/config.yml** to a 64 characters long value.
+* Otherwise, you will get very confusing errors if you run more than one worker thread.
+
+https://github.com/docker/docker-registry/blob/master/config/config_sample.yml
+
+```bash
+SECRET_KEY=$(openssl rand -base64 48)
+
+```
+
+### Start the registry
+
+```bash
+SETTINGS_FLAVOR=prod
+DOCKER_REGISTRY_CONFIG=/registry-conf/docker_registry_config.yml
+
+sudo docker run -p 5000:5000 -v $(pwd)/:/registry-conf -e SETTINGS_FLAVOR=${SETTINGS_FLAVOR} -e DOCKER_REGISTRY_CONFIG=${DOCKER_REGISTRY_CONFIG} registry
+```
 
 
