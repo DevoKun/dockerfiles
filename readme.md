@@ -55,14 +55,22 @@ docker run -ti -v $(pwd)/hosts:/etc/hosts ubuntu:14.04.1 /bin/bash
 
 ### Supervisord Daemon Recipes
 
-#### OpenSSH
+
+
+
+
+
+#### ActiveMQ
 ```ini
-[program:sshd]
-command         = /usr/sbin/sshd -D
-autorestart     = true
-redirect_stderr = true
-stdout_logfile  = /var/log/supervisor/%(program_name)s.log
+[program:activemq]
+command        = /opt/apache-activemq-5.10.0/bin/activemq console
+directory      = /opt/apache-activemq-5.10.0
+stdout_logfile = /var/log/activemq.log
+stderr_logfile = /var/log/activemq-error.log
+autostart      = true
+autorestart    = true
 ```
+
 
 #### Apache HTTPD
 ```ini
@@ -71,81 +79,7 @@ command=httpd -c "ErrorLog /dev/stdout" -DFOREGROUND
 redirect_stderr=true
 ```
 
-#### OpenLDAP
-```ini
-[program:slapd]
-command=slapd -f /etc/slapd.conf -h ldap://0.0.0.0:8888
-redirect_stderr=true
-```
 
-#### MySQL
-```ini
-[program:mysql]
-command=pidproxy /var/run/mysqld.pid mysqld_safe
-```
-
-#### xinetd
-```ini
-[program:xinetd]
-command=/usr/sbin/xinetd -pidfile /var/run/xinetd.pid -stayalive -inetd_compat -dontfork
-```
-
-#### vsftpd
-* Requires **background=NO** is set in **vsftpd.conf**
-```ini
-[program:vsftpd]
-command=/usr/sbin/vsftpd
-```
-
-#### memcached
-```ini
-[program:memcached]
-command      = /usr/bin/memcached -u memcache
-startsecs    = 3
-stopwaitsecs = 3
-```
-
-#### Shibboleth-SP
-```ini
-[program:memcached]
-command      = shibd -F -c /etc/shibboleth/shibboleth2.xml -f -w 30
-user         = shibd
-autostart    = true
-autorestart  = true
-```
-
-#### rsyslogd
-```ini
-[program:rsyslog]
-command      = /bin/bash -c "source /etc/default/rsyslog && /usr/sbin/rsyslogd -n -c3"
-startsecs    = 5
-stopwaitsecs = 5
-```
-#### A NodeJS Application
-```ini
-[program:nodeapp]
-command        = node /path/to/index.js
-directory      = /path/to/
-user           = nodeuser
-autostart      = true
-autorestart    = true
-stdout_logfile = /var/log/supervisor/nodeapp.log
-stderr_logfile = /var/log/supervisor/nodeapp_err.log
-environment    = NODE_ENV="production"
-```
-
-#### Logstash
-```ini
-[program:logstash]
-command        = /opt/logstash/bin/logstashagent -f /etc/logstash/conf.d -l /var/log/logstash.log --verbose
-autostart      = true
-autorestart    = true
-stdout_logfile = /var/log/logstash.log
-stderr_logfile = /var/log/logstash-error.log
-environment    = LS_HOME="/var/lib/logstash",LS_HEAP_SIZE="500m",LS_JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash",JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash"
-user           = logstash
-directory      = /var/lib/logstash
-```
 
 #### Atlassian Stash
 ```ini
@@ -174,6 +108,139 @@ directory      = /opt/bamboo
 ```
 
 
+
+### Cassandra
+```ini
+[program:cassandra]
+command        = cassandra -f
+stdout_logfile = /var/log/cassandra.log
+stderr_logfile = /var/log/cassandra-error.log
+autostart      = true
+autorestart    = true
+```
+
+#### Netflix Priam
+* Priam is run from inside Tomcat.
+* Start Tomcat *(see above)*
+
+
+#### ETCD
+```ini
+[program:etcd]
+command        = /usr/bin/etcd
+stdout_logfile = /var/log/etcd.log
+stderr_logfile = /var/log/etcd-error.log
+autostart      = true
+autorestart    = true
+```
+
+
+
+
+#### MySQL
+```ini
+[program:mysql]
+command=pidproxy /var/run/mysqld.pid mysqld_safe
+```
+
+
+
+#### OpenLDAP
+```ini
+[program:slapd]
+command=slapd -f /etc/slapd.conf -h ldap://0.0.0.0:8888
+redirect_stderr=true
+```
+
+#### OpenSSH
+```ini
+[program:sshd]
+command         = /usr/sbin/sshd -D
+autorestart     = true
+redirect_stderr = true
+stdout_logfile  = /var/log/supervisor/%(program_name)s.log
+```
+
+#### Puppet Master
+```ini
+[program:puppetmaster]
+command = /usr/bin/puppet master --no-daemon
+autorestart = true
+stdout_logfile = /var/log/puppetmaster.log
+stderr_logfile = /var/log/puppetmaster-error.log
+```
+
+
+#### Logstash
+```ini
+[program:logstash]
+command        = /opt/logstash/bin/logstashagent -f /etc/logstash/conf.d -l /var/log/logstash.log --verbose
+autostart      = true
+autorestart    = true
+stdout_logfile = /var/log/logstash.log
+stderr_logfile = /var/log/logstash-error.log
+environment    = LS_HOME="/var/lib/logstash",LS_HEAP_SIZE="500m",LS_JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash",JAVA_OPTS="-Djava.io.tmpdir=/var/lib/logstash"
+user           = logstash
+directory      = /var/lib/logstash
+```
+
+#### NodeJS Application
+```ini
+[program:nodeapp]
+command        = node /path/to/index.js
+directory      = /path/to/
+user           = nodeuser
+autostart      = true
+autorestart    = true
+stdout_logfile = /var/log/supervisor/nodeapp.log
+stderr_logfile = /var/log/supervisor/nodeapp_err.log
+environment    = NODE_ENV="production"
+```
+
+
+#### memcached
+```ini
+[program:memcached]
+command      = /usr/bin/memcached -u memcache
+startsecs    = 3
+stopwaitsecs = 3
+```
+
+#### PHP-fpm *(php5-fpm)*
+```ini
+[program:php5-fpm]
+command        = /usr/sbin/php5-fpm --fpm-config /etc/php5/fpm/php-fpm.conf
+directory      = /etc/php5/fpm/
+stdout_logfile = /var/log/php5-fpm.log
+stderr_logfile = /var/log/php5-fpm-error.log
+autostart      = true
+autorestart    = true
+```
+
+#### rsyslogd
+```ini
+[program:rsyslog]
+command      = /bin/bash -c "source /etc/default/rsyslog && /usr/sbin/rsyslogd -n -c3"
+startsecs    = 5
+stopwaitsecs = 5
+```
+
+#### Shibboleth-SP
+```ini
+[program:shibd]
+command      = shibd -F -c /etc/shibboleth/shibboleth2.xml -f -w 30
+user         = shibd
+autostart    = true
+autorestart  = true
+```
+
+
+
+
+
+
+
+
 #### Tomcat 6
 ```ini
 [program:tomcat6-8300]
@@ -186,6 +253,50 @@ autorestart=true
 user=nobody
 group=nobody
 ```
+
+
+
+#### Tomcat 7 on CentOS 6
+```ini
+[program:tomcat]
+directory      = /usr/share/tomcat
+command        = /usr/local/sbin/supervisord_tomcat.sh
+stdout_logfile = /var/log/tomcat.log
+stderr_logfile = /var/log/tomcat-error.log
+user           = tomcat
+```
+
+
+**FILE**: /usr/local/sbin/tomcat_run.sh
+```bash
+#!/bin/bash
+
+if [ -f /etc/tomcat/tomcat.conf ]; then
+  source /etc/tomcat/tomcat.conf
+fi
+
+export JAVA_HOME="/usr/lib/jvm/jre"
+export _RUNJAVA="/usr/bin/java"
+export LOGGING_CONFIG="-Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties"
+export LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+export JAVA_OPTS=""
+export CATALINA_OPTS=""
+export CATALINA_BASE="/usr/share/tomcat"
+export CATALINA_HOME="/usr/share/tomcat"
+export CATALINA_TMPDIR="/var/cache/tomcat/temp"
+export CLASSPATH="${CATALINA_BASE}/bin/bootstrap.jar:${CATALINA_BASE}/bin/tomcat-juli.jar"
+export JAVA_ENDORSED_DIRS="${CATALINA_BASE}/endorsed"
+
+eval exec "\"$_RUNJAVA\"" "\"$LOGGING_CONFIG\"" $LOGGING_MANAGER $JAVA_OPTS $CATALINA_OPTS \
+  -Djava.endorsed.dirs="\"$JAVA_ENDORSED_DIRS\"" -classpath "\"$CLASSPATH\"" \
+  -Dcatalina.base="\"$CATALINA_BASE\"" \
+  -Dcatalina.home="\"$CATALINA_HOME\"" \
+  -Djava.io.tmpdir="\"$CATALINA_TMPDIR\"" \
+  org.apache.catalina.startup.Bootstrap "$@" start
+```
+
+
+
 
 #### Tomcat 7 with Wrapper
 ```ini
@@ -244,94 +355,46 @@ echo "Waiting for $(cat $CATALINA_PID)"
 wait $(cat $CATALINA_PID)
 ```
 
-#### Tomcat 7 on CentOS 6
+
+
+
+
+
+
+
+#### vsftpd
+* Requires **background=NO** is set in **vsftpd.conf**
 ```ini
-[program:tomcat]
-directory      = /usr/share/tomcat
-command        = /usr/local/sbin/supervisord_tomcat.sh
-stdout_logfile = /var/log/tomcat.log
-stderr_logfile = /var/log/tomcat-error.log
-user           = tomcat
-```
-
-
-**FILE**: /usr/local/sbin/tomcat_run.sh
-```bash
-#!/bin/bash
-
-if [ -f /etc/tomcat/tomcat.conf ]; then
-  source /etc/tomcat/tomcat.conf
-fi
-
-export JAVA_HOME="/usr/lib/jvm/jre"
-export _RUNJAVA="/usr/bin/java"
-export LOGGING_CONFIG="-Djava.util.logging.config.file=/usr/share/tomcat/conf/logging.properties"
-export LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
-export JAVA_OPTS=""
-export CATALINA_OPTS=""
-export CATALINA_BASE="/usr/share/tomcat"
-export CATALINA_HOME="/usr/share/tomcat"
-export CATALINA_TMPDIR="/var/cache/tomcat/temp"
-export CLASSPATH="${CATALINA_BASE}/bin/bootstrap.jar:${CATALINA_BASE}/bin/tomcat-juli.jar"
-export JAVA_ENDORSED_DIRS="${CATALINA_BASE}/endorsed"
-
-eval exec "\"$_RUNJAVA\"" "\"$LOGGING_CONFIG\"" $LOGGING_MANAGER $JAVA_OPTS $CATALINA_OPTS \
-  -Djava.endorsed.dirs="\"$JAVA_ENDORSED_DIRS\"" -classpath "\"$CLASSPATH\"" \
-  -Dcatalina.base="\"$CATALINA_BASE\"" \
-  -Dcatalina.home="\"$CATALINA_HOME\"" \
-  -Djava.io.tmpdir="\"$CATALINA_TMPDIR\"" \
-  org.apache.catalina.startup.Bootstrap "$@" start
+[program:vsftpd]
+command=/usr/sbin/vsftpd
 ```
 
 
 
+#### xinetd
+```ini
+[program:xinetd]
+command=/usr/sbin/xinetd -pidfile /var/run/xinetd.pid -stayalive -inetd_compat -dontfork
+```
 
-## Zookeeper
+
+
+#### Zookeeper
 ```ini
 [program:zookeeper]
-command        = /opt/zookeeper-3.4.5/bin/zkServer.sh start-foreground
-directory      = /opt/zookeeper-3.4.5
+command        = /opt/zookeeper-xxx/bin/zkServer.sh start-foreground
+directory      = /opt/zookeeper-xxx
 stdout_logfile = /var/log/zookeeper.log
 stderr_logfile = /var/log/zookeeper-error.log
 autostart      = true
 autorestart    = true
 ```
 
-## ActiveMQ
-```ini
-[program:activemq]
-command        = /opt/apache-activemq-5.10.0/bin/activemq console
-directory      = /opt/apache-activemq-5.10.0
-stdout_logfile = /var/log/activemq.log
-stderr_logfile = /var/log/activemq-error.log
-autostart      = true
-autorestart    = true
-```
-
-## ETCD
-```ini
-[program:etcd]
-command        = /usr/bin/etcd
-stdout_logfile = /var/log/etcd.log
-stderr_logfile = /var/log/etcd-error.log
-autostart      = true
-autorestart    = true
-```
 
 
-## Cassandra
-```ini
-[program:cassandra]
-command        = cassandra -f
-stdout_logfile = /var/log/cassandra.log
-stderr_logfile = /var/log/cassandra-error.log
-autostart      = true
-autorestart    = true
-```
 
-## Netflix Priam
-* Priam is run from inside Tomcat.
-* Start Tomcat *(see above)*
+
+
 
 
 
@@ -358,8 +421,8 @@ wget https://raw.githubusercontent.com/asbjornenge/Docker.tmbundle/master/Prefer
 
 ## Private Docker Registry
 
-* a git repository for images
-* example: https://github.com/lukaspustina/docker-registry-demo
+* A git repository for images.
+* *example:* https://github.com/lukaspustina/docker-registry-demo
 
 ### Tag a Docker container and push to registry
 
@@ -367,7 +430,7 @@ wget https://raw.githubusercontent.com/asbjornenge/Docker.tmbundle/master/Prefer
 * This commit can be tagged for easy reference with a Docker Tag.
 * In addition, tags are the means to share images on public and private repositories.
 
-#### assuming your registry is listing on localhost port 5000:
+#### assuming your registry is listening on localhost port 5000:
 
 ```bash
  docker tag lukaspustina/registry-demo localhost:5000/registry-demo
