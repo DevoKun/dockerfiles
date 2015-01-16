@@ -20,7 +20,8 @@ MAINTAINER Devon Hubner <devon@hubner.org>
 
 RUN yum install -y wget tar gzip
 
-RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+#RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+RUN /bin/bash -c "if [ -f /etc/yum.repos.d/libselinux.repo ]; then echo 'priority=5' >> /etc/yum.repos.d/libselinux.repo; fi"
 
 # Stash 2.4.2 requires git 1.7.6 or higher.
 
