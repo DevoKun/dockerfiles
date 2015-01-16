@@ -20,7 +20,8 @@ RUN echo -e "\n\n\033[37;1m  * \033[33;1mPuppet and Supervisord from EPEL\033[37
 ADD files/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6 /etc/pki/rpm-gpg/
 ADD files/etc/yum.repos.d/epel.repo          /etc/yum.repos.d/
 
-RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+#RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+RUN /bin/bash -c "if [ -f /etc/yum.repos.d/libselinux.repo ]; then echo 'priority=5' >> /etc/yum.repos.d/libselinux.repo; fi"
 
 RUN yum install -y puppet supervisor
 
