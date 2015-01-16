@@ -11,3 +11,11 @@ awsmaine-aws-ecs/aws-config/credentials
 awsmaine-aws-ecs/aws-config/config
 cassandra-centos/logs/*
 aws_creds.txt
+
+## these have AWS IAM keys inside
+## REMOVE THE keys to commit
+asgard-centos/files/Config.groovy
+cassandra-centos/files/awscredential.properties
+cassandra-centos/priam_simpledb_setup.rb
+
+
