@@ -1,0 +1,41 @@
+chdir: /data
+stdin: /dev/null
+stdout: /data/log/console.log
+stderr: /data/log/console.log
+uid: 1337
+gid: 1337
+argv:
+  - /usr/bin/java
+  - -ea
+  - -javaagent:{{ glob "" "/opt/cassandra/lib/jamm-*.jar" }}
+  - -XX:+CMSClassUnloadingEnabled
+  - -XX:+UseThreadPriorities
+  - -XX:ThreadPriorityPolicy=42
+  - -Xms3941M
+  - -Xmx3941M
+  - -Xmn800M
+  - -XX:+HeapDumpOnOutOfMemoryError
+  - -Xss256k
+  - -XX:StringTableSize=1000003
+  - -XX:+UseParNewGC
+  - -XX:+UseConcMarkSweepGC
+  - -XX:+CMSParallelRemarkEnabled
+  - -XX:SurvivorRatio=8
+  - -XX:MaxTenuringThreshold=1
+  - -XX:CMSInitiatingOccupancyFraction=75
+  - -XX:+UseCMSInitiatingOccupancyOnly
+  - -XX:+UseTLAB
+  - -XX:CompileCommandFile=/data/conf/hotspot_compiler
+  - -XX:CMSWaitDuration=10000
+  - -XX:+UseCondCardMark
+  - -Djava.net.preferIPv4Stack=true
+  - -Dcom.sun.management.jmxremote.port=7199
+  - -Dcom.sun.management.jmxremote.rmi.port=7199
+  - -Dcom.sun.management.jmxremote.ssl=false
+  - -Dcom.sun.management.jmxremote.authenticate=false
+  - -Dlogback.configurationFile=logback.xml
+  - -Dcassandra.logdir=/data/log
+  - -Dcassandra-foreground=yes
+  - -cp
+  - {{ glob ":" "/data/conf" "/data/lib" "/opt/cassandra/lib/*.jar" }}
+  - org.apache.cassandra.service.CassandraDaemon

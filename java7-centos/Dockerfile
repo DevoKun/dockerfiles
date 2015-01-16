@@ -11,7 +11,8 @@ MAINTAINER Devon Hubner <devon@hubner.org>
 
 
 
-RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+#RUN echo "priority=5" >> /etc/yum.repos.d/libselinux.repo
+RUN /bin/bash -c "if [ -f /etc/yum.repos.d/libselinux.repo ]; then echo 'priority=5' >> /etc/yum.repos.d/libselinux.repo; fi"
 
 ##### jna comes from EPEL
 ##### wget http://dl.fedoraproject.org/pub/epel/6Server/x86_64/epel-release-6-8.noarch.rpm
