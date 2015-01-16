@@ -7,3 +7,7 @@
 Config.groovy
 java7-centos/compile_priam/priam
 java7-centos/compile_priam/priam/*
+awsmaine-aws-ecs/aws-config/credentials
+awsmaine-aws-ecs/aws-config/config
+cassandra-centos/logs/*
+aws_creds.txt
