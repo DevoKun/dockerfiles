@@ -127,11 +127,13 @@ autorestart    = true
 #### ETCD
 ```ini
 [program:etcd]
-command        = /usr/bin/etcd
+command        = /usr/sbin/etcd
 stdout_logfile = /var/log/etcd.log
 stderr_logfile = /var/log/etcd-error.log
 autostart      = true
 autorestart    = true
+environment    = ETCD_NAME=etcd1,ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379",ETCD_ADVERTISE_CLIENT_URLS="http://0.0.0.0:2379",ETCD_ENDPOINTS="http://0.0.0.0:2379",ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380",ETCD_INITIAL_CLUSTER="etcd1=http://10.10.100.10:2380,etcd2=http://10.10.100.20:2380,etcd3=http://10.10.100.30:2380",ETCD_INITIAL_ADVERTISE_PEER_URLS="http://0.0.0.0:2380",ETCD_INITIAL_CLUSTER_STATE="existing",ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+
 ```
 
 
